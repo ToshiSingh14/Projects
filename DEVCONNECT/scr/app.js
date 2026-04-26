@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const postsRoutes = require("./routes/postsRoutes");
 
 
 
@@ -11,5 +12,9 @@ app.get("/",(req,res)=>{
     res.send("hi from the server");
 
 });
+
+
+
+app.use("/post", postsRoutes);
 
 module.exports = app;
