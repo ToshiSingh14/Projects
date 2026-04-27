@@ -5,6 +5,7 @@ const path = require("path");
 const postsRoutes = require("./routes/postsRoutes");
 const cookieParser = require("cookie-parser");
 const methodOverride = require("method-override");
+const auth = require("./middlewares/auth");
 
 
 
@@ -37,20 +38,23 @@ app.get("/signin", (req, res) => {
     res.render("signin");
 });
 
-app.get("/dashboard", async (req, res) => {
+app.get("/dashboard", auth, async (req, res) => {
     try {
         const posts = await Post.find()
             .populate("author", "username")
             .sort({ createdAt: -1 });
 
-        res.render("dashboard", { posts });
+        res.render("dashboard", {
+            posts,
+            userId: req.user.userId
+        });
 
     } catch (error) {
         res.send("Error loading dashboard");
     }
 });
 
-app.get("/create", (req, res) => {
+app.get("/create", auth, (req, res) => {
     res.render("createPost");
 });
 

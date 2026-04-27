@@ -1,27 +1,31 @@
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
 const auth = (req, res, next) => {
-    
-    const token = req.cookies.token;
+    let token;
+
+    // Browser cookie token first
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+
+    // API header token second
+    else if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer ")
+    ) {
+        token = req.headers.authorization.split(" ")[1];
+    }
 
     if (!token) {
-        return res.status(401).send({
-            message: "Token required"
-        });
+        return res.status(401).send({ message: "Token required" });
     }
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-
-        req.user = decoded;   // save user data
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
         next();
-
     } catch (error) {
-        res.status(401).send({
-            message: "Invalid token"
-        });
+        return res.status(401).send({ message: "Invalid token" });
     }
 };
 

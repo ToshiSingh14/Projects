@@ -19,10 +19,15 @@ router.get("/", auth, postController.sendPosts); // Get all posts
 
 router.post("/create", auth, postController.createPost); // Create post
 
+router.get("/edit/:id", auth, postController.editPostPage); // Show edit form
+
 router.get("/:id", auth, postController.getSinglePost); // Get single post
 
 router.put("/:id", auth, postController.updatePost); // Update own post
 
 router.delete("/:id", auth, postController.deletePost); // Delete own post
+
+
+
 
 module.exports = router;

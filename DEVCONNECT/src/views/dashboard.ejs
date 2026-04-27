@@ -1,3 +1,5 @@
+<!-- Update dashboard.ejs -->
+
 <link rel="stylesheet" href="/css/style.css">
 
 <nav>
@@ -10,6 +12,10 @@
 
 <h1>Dashboard</h1>
 
+<% if(posts.length === 0) { %>
+    <h3>No posts available</h3>
+<% } %>
+
 <% posts.forEach(post => { %>
 
 <div class="card">
@@ -20,9 +26,19 @@
 
     <p class="small">By <%= post.author.username %></p>
 
-    <form action="/post/<%= post._id %>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
+    <br>
+
+    <a class="btn" href="/post/<%= post._id %>">View</a>
+
+    <% if(post.author._id.toString() === userId) { %>
+
+        <a class="btn" href="/post/edit/<%= post._id %>">Edit</a>
+
+        <form action="/post/<%= post._id %>?_method=DELETE" method="POST" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
+
+    <% } %>
 
 </div>
 

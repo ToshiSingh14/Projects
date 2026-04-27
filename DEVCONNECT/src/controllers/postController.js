@@ -135,86 +135,118 @@ const sendPosts = async (req, res) => {
 };
 
 
-//GET SINGLE POST
-const getSinglePost = async (req, res) => {
-    try {
-        const post = await Post.findById(req.params.id)
-            .populate("author", "username");
 
-        if (!post) {
-            return res.status(404).send({
-                message: "Post not found"
-            });
-        }
-
-        res.send(post);
-
-    } catch (error) {
-        res.status(500).send({
-            message: "Server error"
-        });
-    }
-};
 
 // UPDATE OWN POST
+
 const updatePost = async (req, res) => {
     try {
-        const token = req.headers.authorization;
-        const decoded = jwt.verify(token, JWT_SECRET);
-
         const post = await Post.findById(req.params.id);
 
         if (!post) {
-            return res.status(404).send({
-                message: "Post not found"
-            });
+            return res.send("Post not found");
         }
 
-        if (post.author.toString() !== decoded.userId) {
-            return res.status(403).send({
-                message: "Not allowed"
-            });
+        // owner only
+        if (post.author.toString() !== req.user.userId) {
+            return res.status(403).send("Unauthorized");
         }
 
-        post.title = req.body.title || post.title;
-        post.content = req.body.content || post.content;
+        post.title = req.body.title;
+        post.content = req.body.content;
 
         await post.save();
 
-        res.send({
-            message: "Post updated",
-            post
-        });
+        res.redirect("/dashboard");
 
     } catch (error) {
-        res.status(500).send({
-            message: "Server error"
-        });
+        console.log(error);
+        res.send({ message: "Server error" });
     }
 };
 
 // DELETE OWN POST
 const deletePost = async (req, res) => {
     try {
-        const postId = req.params.id;
+        const post = await Post.findById(req.params.id);
 
-        await Post.findByIdAndDelete(postId);
+        if (!post) {
+            return res.status(404).send("Post not found");
+        }
+
+        if (post.author.toString() !== req.user.userId) {
+            return res.status(403).send("Only owner can delete");
+        }
+
+        await Post.findByIdAndDelete(req.params.id);
 
         res.redirect("/dashboard");
 
     } catch (error) {
-        console.log(error);
         res.status(500).send("Server Error");
     }
 };
+
+// DASHBOARD PAGE
+const dashboard = async (req, res) => {
+    try {
+        const posts = await Post.find()
+            .populate("author", "username");
+
+        res.render("dashboard", {
+            posts,
+            userId: req.user.userId
+        });
+
+    } catch (error) {
+        res.status(500).send("Server Error");
+    }
+};
+
+// Get Single Post
+const getSinglePost = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id).populate("author", "username");
+
+        if (!post) return res.send("Post not found");
+
+        res.render("singlePost", { post });
+
+    } catch (error) {
+        res.send("Error loading post");
+    }
+};
+
+// Show Edit Form
+const editPostPage = async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+
+        if (!post) return res.send("Post not found");
+
+        if (post.author.toString() !== req.user.userId) {
+            return res.status(403).send("Unauthorized");
+        }
+
+        res.render("editPost", { post });
+
+    } catch (error) {
+        res.send("Error loading edit page");
+    }
+};
+
+
 
 module.exports = {
      signup,
     signin,
     me,
+    dashboard,
     createPost,
     sendPosts,
     getSinglePost,
     updatePost,
-    deletePost
+    deletePost,
+    editPostPage,
+    getSinglePost
 };

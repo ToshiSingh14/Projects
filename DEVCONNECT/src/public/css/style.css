@@ -1,90 +1,199 @@
 body{
     margin:0;
-    font-family: Arial, sans-serif;
-    background:#f4f6f8;
-    color:#222;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#0f172a,#1e1b4b,#312e81);
+    color:#f8fafc;
 }
 
-.container{
-    width:90%;
-    max-width:900px;
-    margin:auto;
-    padding:20px;
-}
-
+/* Navbar */
 nav{
-    background:#111827;
-    padding:15px 30px;
+    background:linear-gradient(90deg,#111827,#312e81,#7c3aed);
+    padding:18px 40px;
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.45);
 }
 
 nav a{
-    color:white;
+    color:#f8fafc;
     text-decoration:none;
-    margin-right:20px;
-    font-weight:bold;
+    font-size:20px;
+    font-weight:600;
+    transition:0.3s;
 }
 
-h1,h2{
-    color:#111827;
+nav a:hover{
+    color:#f472b6;
 }
 
+/* Main Container */
+.container{
+    width:75%;
+    max-width:850px;
+    margin:auto;
+    padding:35px 0;
+}
+
+/* Headings */
+h1{
+    font-size:42px;
+    margin-bottom:25px;
+    color:#ffffff;
+}
+
+h2{
+    margin-top:0;
+    color:#ffffff;
+}
+
+/* Cards */
 .card{
-    background:white;
-    padding:20px;
-    margin:15px 0;
-    border-radius:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    background:linear-gradient(145deg,#1e293b,#312e81);
+    padding:22px;
+    margin-bottom:18px;
+    border-radius:16px;
+    box-shadow:0 10px 20px rgba(0,0,0,0.35);
+    transition:0.3s;
 }
 
-input,textarea{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:16px;
-}
-
-textarea{
-    min-height:120px;
-}
-
-button{
-    background:#2563eb;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:16px;
-}
-
-button:hover{
-    background:#1d4ed8;
-}
-
-a.btn{
-    display:inline-block;
-    background:#16a34a;
-    color:white;
-    padding:10px 16px;
-    border-radius:8px;
-    text-decoration:none;
-}
-
-a.btn:hover{
-    background:#15803d;
-}
-
-.small{
-    color:#666;
-    font-size:14px;
+.card:hover{
+    transform:translateY(-4px);
 }
 
 .card h2{
-    margin-top:0;
+    font-size:32px;
+    margin-bottom:10px;
+    color:#facc15;
 }
 
-form{
-    margin-top:20px;
+/* Forms */
+input,
+textarea{
+    width:100%;
+    padding:14px;
+    margin:12px 0;
+    border:1px solid #475569;
+    border-radius:10px;
+    font-size:16px;
+    background:#0f172a;
+    color:#f8fafc;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#94a3b8;
+}
+
+textarea{
+    min-height:140px;
+}
+
+/* Buttons */
+button,
+.btn{
+    background:linear-gradient(90deg,#2563eb,#7c3aed);
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.3s;
+}
+
+button:hover,
+.btn:hover{
+    transform:scale(1.03);
+}
+
+.secondary{
+    background:linear-gradient(90deg,#16a34a,#22c55e);
+}
+
+.small{
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+/* Landing Page */
+.hero{
+    min-height:90vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+
+.hero-box{
+    max-width:800px;
+}
+
+.hero-box h1{
+    font-size:64px;
+    margin-bottom:20px;
+    background:linear-gradient(90deg,#38bdf8,#f472b6,#facc15);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero-box p{
+    font-size:26px;
+    line-height:1.6;
+    margin-bottom:30px;
+    color:#e2e8f0;
+}
+
+.hero-buttons{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+/* Make links clearly visible */
+a{
+    color:#38bdf8;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.3s;
+}
+
+a:hover{
+    color:#facc15;
+    text-decoration:underline;
+}
+
+/* Fix back to dashboard link */
+.back-link{
+    display:inline-block;
+    margin-top:18px;
+    color:#22d3ee;
+    font-size:18px;
+    font-weight:700;
+}
+
+.back-link:hover{
+    color:#facc15;
+}
+
+/* Fix signin / signup bottom links */
+.auth-link{
+    color:#60a5fa;
+    font-weight:700;
+}
+
+.auth-link:hover{
+    color:#f472b6;
+}
+
+/* Bottom text */
+.auth-text{
+    margin-top:18px;
+    text-align:center;
+    color:#e2e8f0;
+    font-size:18px;
 }
