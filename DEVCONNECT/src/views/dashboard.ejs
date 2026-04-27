@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="/css/style.css">
+
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/create">Create Post</a>
+    <a href="/logout">Logout</a>
+</nav>
+
+<div class="container">
+
+<h1>Dashboard</h1>
+
+<% posts.forEach(post => { %>
+
+<div class="card">
+
+    <h2><%= post.title %></h2>
+
+    <p><%= post.content %></p>
+
+    <p class="small">By <%= post.author.username %></p>
+
+    <form action="/post/<%= post._id %>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
+
+</div>
+
+<% }) %>
+
+</div>

@@ -67,10 +67,8 @@ const signin = async (req, res) => {
             { expiresIn: "1h" }
         );
 
-        res.send({
-            message: "Login successful",
-            token
-        });
+       res.cookie("token", token);
+       res.redirect("/dashboard");
 
     } catch (error) {
         res.status(500).send({
@@ -111,35 +109,15 @@ const me = async (req, res) => {
 
 // CREATE POST
 const createPost = async (req, res) => {
-    try {
-        const token = req.headers.authorization;
+    const { title, content } = req.body;
 
-        if (!token) {
-            return res.status(401).send({
-                message: "Token required"
-            });
-        }
+    const post = await Post.create({
+        title,
+        content,
+        author: req.user.userId
+    });
 
-        const decoded = jwt.verify(token, JWT_SECRET);
-
-        const { title, content } = req.body;
-
-        const post = await Post.create({
-            title,
-            content,
-            author: decoded.userId
-        });
-
-        res.status(201).send({
-            message: "Post created",
-            post
-        });
-
-    } catch (error) {
-        res.status(500).send({
-            message: "Server error"
-        });
-    }
+    res.redirect("/dashboard");
 };
 
 // GET ALL POSTS
@@ -218,33 +196,15 @@ const updatePost = async (req, res) => {
 // DELETE OWN POST
 const deletePost = async (req, res) => {
     try {
-        const token = req.headers.authorization;
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const postId = req.params.id;
 
-        const post = await Post.findById(req.params.id);
+        await Post.findByIdAndDelete(postId);
 
-        if (!post) {
-            return res.status(404).send({
-                message: "Post not found"
-            });
-        }
-
-        if (post.author.toString() !== decoded.userId) {
-            return res.status(403).send({
-                message: "Not allowed"
-            });
-        }
-
-        await Post.findByIdAndDelete(req.params.id);
-
-        res.send({
-            message: "Post deleted"
-        });
+        res.redirect("/dashboard");
 
     } catch (error) {
-        res.status(500).send({
-            message: "Server error"
-        });
+        console.log(error);
+        res.status(500).send("Server Error");
     }
 };
 
